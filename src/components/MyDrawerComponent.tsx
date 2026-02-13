@@ -11,10 +11,7 @@ import {
 } from "@mui/material";
 import React, {useState} from "react";
 import {useQuery} from "../UseQuery";
-import {
-    createVersionGroupCall,
-    VersionGroup
-} from "../api/types/games/VersionGroups";
+import {createVersionGroupCall, VersionGroup} from "../api/types/games/VersionGroups";
 import {createPokedexCall, Pokedex} from "../api/types/games/Pokedex";
 
 type DrawerProps = {
@@ -105,7 +102,7 @@ function VersionGroupEntry(
                 }
             >
                 <Divider/>
-                {versionGroup.pokedexes.map((pokedex, i) => {
+                {versionGroup.pokedexes.map((pokedex) => {
                     return <PokedexEntry
                         pokedexName={pokedex.name}
                         selected={pokedex.name === selectedDex}
@@ -142,9 +139,9 @@ function PokedexEntry(
     let palette = useTheme().palette;
 
     return <ListItemButton
-        sx={{pl: 4}}
         style={{
-            backgroundColor: selected ? palette.secondary.main : isHovered ? palette.secondary.light : standardBackGround
+            backgroundColor: selected ? palette.secondary.main : isHovered ? palette.secondary.light : standardBackGround,
+            border: "darkcyan"
         }}
         onMouseOver={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -154,6 +151,4 @@ function PokedexEntry(
         }}>
         <Typography>{pokedexName}</Typography>
     </ListItemButton>
-
-
 }

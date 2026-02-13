@@ -1,7 +1,7 @@
-import {Card, Stack, Typography, useTheme} from "@mui/material";
+import {Card, Stack, TextField, Typography, useTheme} from "@mui/material";
 import {createPokedexCall, Pokedex} from "../api/types/games/Pokedex";
 import {useQuery} from "../UseQuery";
-import {useState} from "react";
+import {ReactElement, useState} from "react";
 
 type MyPokedexComponentProps = {
     idOrName: number | string;
@@ -13,25 +13,45 @@ export function MyPokedexComponent({
                                        idOrName,
                                        selectPokemonCallBack,
                                        selectedPokemon
-                                   }: MyPokedexComponentProps) {
-    let pokedex = useQuery<Pokedex>(createPokedexCall(idOrName));
+                                   }: MyPokedexComponentProps): ReactElement {
+    let pokedex: Pokedex = useQuery<Pokedex>(createPokedexCall(idOrName));
+    let [searchQuery, setSearchQuery] = useState<string>("")
 
-    return <Card
-        variant={"outlined"}
-    >
-        <Stack
-            padding={"1vh"}
-            spacing={"0.5vh"}
-            overflow={"auto"}
-            height={"85vh"}
-        >
-            {pokedex.pokemon_entries.map(pokemon => <SimplePokemonEntry
-                pokedex={pokedex}
-                selected={pokemon.pokemon_species.name === selectedPokemon}
-                index={pokemon.entry_number}
-                selectPokemonCallBack={selectPokemonCallBack}/>)}
-        </Stack>
-    </Card>
+    return (
+        <Card>
+            <Stack
+                height={"85vh"}
+                style={{padding: "1vh"}}
+            >
+                <TextField
+                    style={{padding: "1vh"}}
+                    variant={"filled"}
+                    label={"Search"}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Stack
+                    padding={"1vh"}
+                    spacing={"0.5vh"}
+                    overflow={"auto"}
+                >
+                    {pokedex.pokemon_entries
+                        .filter(pokemon => pokemon.pokemon_species.name.includes(searchQuery))
+                        .map(pokemon => (
+                            <SimplePokemonEntry
+                                key={pokemon.entry_number} // Always include a key!
+                                pokedex={pokedex}
+                                selected={pokemon.pokemon_species.name === selectedPokemon}
+                                index={pokemon.entry_number}
+                                selectPokemonCallBack={selectPokemonCallBack}
+                            />
+                        ))}
+                </Stack>
+
+            </Stack>
+
+
+        </Card>
+    );
 }
 
 type PokemonEntry = {
@@ -51,6 +71,7 @@ function SimplePokemonEntry({
         style={{
             padding: "1vh",
             minHeight: "1.3em",
+            borderRadius: "10px 1px 1px 1px",
             backgroundColor: selected ? palette.secondary.main : isHovered ? palette.secondary.light : palette.background.default,
         }}
         variant={"outlined"}
