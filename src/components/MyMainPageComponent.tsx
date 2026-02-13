@@ -1,8 +1,8 @@
 import {ReactElement, ReactNode, Suspense, useState} from "react";
 import {Card, Grid2, Stack, Typography, useTheme} from "@mui/material";
-import {MyPokedexComponent} from "./MyPokedexComponent";
-import MyPokemonComponent from "./MyPokemonComponent";
+import MyPokemonComponent from "./pokemon/MyPokemonComponent";
 import {MyNavigationMenu} from "./MyNavigationMenu";
+import {MyPokedexComponent} from "./MyPokedexComponent";
 
 
 const MainLayout = ({children}: { children: ReactNode }): ReactElement => {
